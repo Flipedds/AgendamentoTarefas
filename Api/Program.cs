@@ -1,9 +1,16 @@
+using System.Text.Json.Serialization;
+using Api.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+        
+builder.Services.AddDbContext<OrganizadorContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
